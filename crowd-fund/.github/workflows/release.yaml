@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.vscode/**'
+      - '.idea/**'
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  crowd-fund-contracts-validate:
+    name: Run crowd-fund-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/crowd-fund-contracts-ci.yaml
+
+  crowd-fund-contracts-release:
+    name: Run crowd-fund-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/crowd-fund-contracts-cd.yaml
+    needs: crowd-fund-contracts-validate
+
+  crowd-fund-frontend-validate:
+    name: Run crowd-fund-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/crowd-fund-frontend-ci.yaml
+
+  crowd-fund-frontend-release:
+    name: Run crowd-fund-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/crowd-fund-frontend-cd.yaml
+    needs: crowd-fund-frontend-validate

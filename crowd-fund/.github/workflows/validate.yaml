@@ -1,0 +1,14 @@
+name: Pull Request validation
+
+on: [pull_request]
+
+
+jobs:
+  crowd-fund-contracts-ci:
+    name: Run crowd-fund-contracts validation
+    uses: ./.github/workflows/crowd-fund-contracts-ci.yaml
+
+  crowd-fund-frontend-ci:
+    name: Run crowd-fund-frontend validation
+    uses: ./.github/workflows/crowd-fund-frontend-ci.yaml
+
