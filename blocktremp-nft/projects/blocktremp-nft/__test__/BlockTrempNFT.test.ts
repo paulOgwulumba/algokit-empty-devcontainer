@@ -103,6 +103,8 @@ describe('BlockTrempNFT', () => {
       ],
       assetReferences: [assetId],
       extraFee: algokit.microAlgos(1_000),
+      sender: firstBuyer.addr,
+      signer: makeBasicAccountTransactionSigner(firstBuyer),
     });
   });
 
@@ -146,5 +148,28 @@ describe('BlockTrempNFT', () => {
     console.debug('balance', balance);
     expect(balance).toEqual(1);
 
+  });
+
+  test('claim2', async () => {
+    const data = await appClient.appClient.getBoxValueFromABIType(HASH_2, algosdk.ABIType.from('(uint64,address)')) as [bigint, string];
+    const [assetId, address] = data;
+    
+    expect(address).toEqual(secondBuyer.addr);
+
+    await appClient.send.claimCertificate({
+      args: {
+        ipfsHash: HASH_2,
+      },
+      boxReferences: [
+        {
+          appId: appClient.appId,
+          name: HASH_2,
+        }
+      ],
+      assetReferences: [assetId],
+      extraFee: algokit.microAlgos(1_000),
+      sender: secondBuyer.addr,
+      signer: makeBasicAccountTransactionSigner(secondBuyer),
+    });
   });
 });

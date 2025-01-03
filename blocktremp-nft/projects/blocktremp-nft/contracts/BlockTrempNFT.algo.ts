@@ -66,7 +66,8 @@ export class BlockTrempNFT extends Contract {
 
     const box = this.certificateBoxes(ipfsHash).value;
 
-    // assert(this.txn.sender === box.address);
+    assert(this.txn.sender === box.address);
+    assert(this.txn.sender.isOptedInToAsset(AssetID.fromUint64(box.asaId)));
     assert(this.app.address.assetBalance(AssetID.fromUint64(box.asaId)) === 1);
 
     sendAssetTransfer({
