@@ -1,0 +1,45 @@
+{
+  "name": "BlockTrempNFT",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createCertificate",
+      "desc": "This method mints the certificate ASA for the user and\nreturns the ASA ID.",
+      "args": [
+        {
+          "name": "ipfsHash",
+          "type": "string",
+          "desc": "The hash for the certificate."
+        },
+        {
+          "name": "mbrPayment",
+          "type": "pay",
+          "desc": "Payment for the minimum balance requirement for the\nbox storage where a reference to the ASA would be persisted in."
+        }
+      ],
+      "returns": {
+        "type": "uint64",
+        "desc": "The ID of the asset."
+      }
+    },
+    {
+      "name": "claimCertificate",
+      "args": [
+        {
+          "name": "ipfsHash",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "createApplication",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

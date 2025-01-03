@@ -17,6 +17,7 @@ type Metadata = {
 
 const COST_PER_BYTE = 400;
 const COST_PER_BOX = 2500;
+const MBR = 100_000;
 
 export class BlockTrempNFT extends Contract {
   /** The boxes that keep track of all created NFTs */
@@ -30,10 +31,10 @@ export class BlockTrempNFT extends Contract {
    * box storage where a reference to the ASA would be persisted in.
    * @returns The ID of the asset.
    */
-  createCertificate(ipfsHash: string, mbrPayment: PayTxn): AssetReference {
+  createCertificate(ipfsHash: string, mbrPayment: PayTxn): AssetID {
     assert(!this.certificateBoxes(ipfsHash).exists);
 
-    const totalCost = COST_PER_BOX + (COST_PER_BYTE * (64 + 64));
+    const totalCost = MBR + COST_PER_BOX + (COST_PER_BYTE * (64 + 64));
 
     assert(mbrPayment.amount >= totalCost);
     assert(mbrPayment.receiver === this.app.address);
@@ -60,12 +61,18 @@ export class BlockTrempNFT extends Contract {
     return assetID;
   }
 
-  claimCertificate(ipfsHash: string, assetID: AssetReference) {
+  claimCertificate(ipfsHash: string) {
     assert(this.certificateBoxes(ipfsHash).exists);
 
-    const box = this.certificateBoxes(ipfsHash);
+    const box = this.certificateBoxes(ipfsHash).value;
 
-    assert(box.value.address === this.txn.sender);
-    // assert(this.app.)
+    // assert(this.txn.sender === box.address);
+    assert(this.app.address.assetBalance(AssetID.fromUint64(box.asaId)) === 1);
+
+    sendAssetTransfer({
+      assetReceiver: box.address,
+      assetAmount: 1,
+      xferAsset: AssetID.fromUint64(box.asaId),
+    });
   }
 }
