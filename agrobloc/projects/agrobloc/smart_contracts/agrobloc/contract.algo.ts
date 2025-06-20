@@ -1,20 +1,32 @@
-import { Contract, BoxMap, arc4, uint64 } from '@algorandfoundation/algorand-typescript'
-
-const COST_PER_BYTE = 400;
-const COST_PER_BOX = 2500;
-const MBR = 100_000;
+import {
+  abimethod,
+  arc4,
+  assert,
+  BoxMap,
+  Contract,
+  itxn,
+  Txn,
+  uint64,
+} from '@algorandfoundation/algorand-typescript';
 
 class Property extends arc4.Struct<{
+  // Property title
   title: arc4.Str,
+
+  // Property ASA
   asset: arc4.UintN64,
+
+  // Property value
   value: arc4.UintN64,
-  maxInvestmentClaimable: arc4.UintN64,
 
   // Owner of property
   owner: arc4.Address,
 
   // Latitude and longitude
   latLong: arc4.Str,
+
+  // Physical address of property
+  address: arc4.Str,
 
   // Identifier for investment claimed with this property.
   // Defaults to 0.
@@ -35,14 +47,58 @@ class Investment extends arc4.Struct<{
   // Investor
   owner: arc4.Address,
 
+  // Investor title
+  ownerTitle: arc4.Str,
+
   // Farmer
   claimer: arc4.Str,
+
+  // Value of investment
+  value: arc4.UintN64,
+
+  // Amount repaid
+  amountRepaid: arc4.UintN64,
+
+  // Amount to repay
+  amountToRepay: arc4.UintN64,
 }> {}
 
 export class Agrobloc extends Contract {
   public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
 
-  public investment = BoxMap<uint64, Property>({ keyPrefix: 'investment' });
+  public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+
+  @abimethod({ onCreate: 'require' })
+  public create_application() {}
+
+  @abimethod()
+  public list_property(
+    title: string, 
+    value: uint64, 
+    latLong: string, 
+    address: string
+  ): uint64 {
+    assert(value > 0);
+
+    const response = itxn.assetConfig({
+      assetName: title,
+      total: 1,
+      decimals: 0,
+    }).submit();
+
+    this.property(response.createdAsset.id).value = new Property({
+      title: new arc4.Str(title),
+      asset: new arc4.UintN64(response.createdAsset.id),
+      owner: new arc4.Address(Txn.sender),
+      latLong: new arc4.Str(latLong),
+      address: new arc4.Str(address),
+      investment: new arc4.UintN64(0),
+      value: new arc4.UintN64(value),
+    });
+
+    return response.createdAsset.id;
+  }
+
 
   public hello(name: string): string {
     return `Hello, ${name}`
