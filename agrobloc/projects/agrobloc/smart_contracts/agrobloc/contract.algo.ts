@@ -2,6 +2,7 @@ import {
   abimethod,
   arc4,
   assert,
+  Asset,
   BoxMap,
   Contract,
   Global,
@@ -85,31 +86,38 @@ export class Agrobloc extends Contract {
   public create_application() {}
 
   @abimethod()
-  public list_property(
+  public tokenize(
     title: string, 
-    value: uint64, 
-    latLong: string, 
-    address: string
   ): uint64 {
-    assert(value > 0);
-
     const response = itxn.assetConfig({
       assetName: title,
       total: 1,
       decimals: 0,
     }).submit();
 
-    this.property(response.createdAsset.id).value = new Property({
+    return response.createdAsset.id;
+  }
+
+  @abimethod()
+  public list_property(
+    title: string, 
+    value: uint64, 
+    latLong: string, 
+    address: string,
+    asset: Asset,
+  ) {
+    assert(value > 0);
+    assert(!this.property(asset.id).exists);
+
+    this.property(asset.id).value = new Property({
       title: new arc4.Str(title),
-      asset: new arc4.UintN64(response.createdAsset.id),
+      asset: new arc4.UintN64(asset.id),
       owner: new arc4.Address(Txn.sender),
       latLong: new arc4.Str(latLong),
       address: new arc4.Str(address),
       investment: new arc4.UintN64(0),
       value: new arc4.UintN64(value),
     });
-
-    return response.createdAsset.id;
   }
 
   @abimethod()
@@ -118,18 +126,14 @@ export class Agrobloc extends Contract {
     apy: uint64,
     maturityDuration: uint64,
     ownerTitle: string,
+    asset: Asset,
   ): uint64 {
     assert(paymentTxn.amount > 0);
+    assert(!this.investment(asset.id).exists);
 
-    const response = itxn.assetConfig({
-      assetName: ownerTitle,
-      total: 1,
-      decimals: 0,
-    }).submit();
-
-    this.investment(response.createdAsset.id).value = new Investment({
+    this.investment(asset.id).value = new Investment({
       ownerTitle: new arc4.Str(ownerTitle),
-      asset: new arc4.UintN64(response.createdAsset.id),
+      asset: new arc4.UintN64(asset.id),
       owner: new arc4.Address(Txn.sender),
       apy: new arc4.UintN64(apy),
       maturityDuration: new arc4.UintN64(maturityDuration),
@@ -141,7 +145,7 @@ export class Agrobloc extends Contract {
       collateral: new arc4.UintN64(0),
     });
 
-    return response.createdAsset.id;
+    return asset.id;
   }
 
   @abimethod()

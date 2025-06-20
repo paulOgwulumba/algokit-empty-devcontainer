@@ -5,83 +5,83 @@
 main:
     intcblock 1 0 50 52
     bytecblock 0x0000000000000000 "property" "investment" 0x003e 0x0082 0x151f7c75
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txn NumAppArgs
-    bz main_after_if_else@14
-    pushbytess 0x752c3ac0 0x97396d97 0xaed7e0f2 0x25194192 0x7ac1ee68 0xba7dc88e 0xb30ad16d 0x232ecca8 // method "create_application()void", method "list_property(string,uint64,string,string)uint64", method "create_investment(pay,uint64,uint64,string)uint64", method "claim_investment(uint64,uint64)void", method "repay_investment(pay,uint64)void", method "delete_investment(uint64)void", method "claim_overdue_investment(uint64)void", method "delete_property(uint64)void"
+    bz main_after_if_else@15
+    pushbytess 0x752c3ac0 0x18e2d839 0x2dc1f228 0x085423ae 0x25194192 0x7ac1ee68 0xba7dc88e 0xb30ad16d 0x232ecca8 // method "create_application()void", method "tokenize(string)uint64", method "list_property(string,uint64,string,string,asset)void", method "create_investment(pay,uint64,uint64,string,asset)uint64", method "claim_investment(uint64,uint64)void", method "repay_investment(pay,uint64)void", method "delete_investment(uint64)void", method "claim_overdue_investment(uint64)void", method "delete_property(uint64)void"
     txna ApplicationArgs 0
-    match main_create_application_route@3 main_list_property_route@4 main_create_investment_route@5 main_claim_investment_route@6 main_repay_investment_route@7 main_delete_investment_route@8 main_claim_overdue_investment_route@9 main_delete_property_route@10
+    match main_create_application_route@3 main_tokenize_route@4 main_list_property_route@5 main_create_investment_route@6 main_claim_investment_route@7 main_repay_investment_route@8 main_delete_investment_route@9 main_claim_overdue_investment_route@10 main_delete_property_route@11
 
-main_after_if_else@14:
-    // smart_contracts/agrobloc/contract.algo.ts:79
+main_after_if_else@15:
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     intc_1 // 0
     return
 
-main_delete_property_route@10:
-    // smart_contracts/agrobloc/contract.algo.ts:309
+main_delete_property_route@11:
+    // smart_contracts/agrobloc/contract.algo.ts:313
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txna ApplicationArgs 1
     btoi
-    // smart_contracts/agrobloc/contract.algo.ts:309
+    // smart_contracts/agrobloc/contract.algo.ts:313
     // @abimethod()
     callsub delete_property
     intc_0 // 1
     return
 
-main_claim_overdue_investment_route@9:
-    // smart_contracts/agrobloc/contract.algo.ts:267
+main_claim_overdue_investment_route@10:
+    // smart_contracts/agrobloc/contract.algo.ts:271
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txna ApplicationArgs 1
     btoi
-    // smart_contracts/agrobloc/contract.algo.ts:267
+    // smart_contracts/agrobloc/contract.algo.ts:271
     // @abimethod()
     callsub claim_overdue_investment
     intc_0 // 1
     return
 
-main_delete_investment_route@8:
-    // smart_contracts/agrobloc/contract.algo.ts:250
+main_delete_investment_route@9:
+    // smart_contracts/agrobloc/contract.algo.ts:254
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txna ApplicationArgs 1
     btoi
-    // smart_contracts/agrobloc/contract.algo.ts:250
+    // smart_contracts/agrobloc/contract.algo.ts:254
     // @abimethod()
     callsub delete_investment
     intc_0 // 1
     return
 
-main_repay_investment_route@7:
-    // smart_contracts/agrobloc/contract.algo.ts:192
+main_repay_investment_route@8:
+    // smart_contracts/agrobloc/contract.algo.ts:196
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txn GroupIndex
     intc_0 // 1
@@ -93,41 +93,41 @@ main_repay_investment_route@7:
     assert // transaction type is pay
     txna ApplicationArgs 1
     btoi
-    // smart_contracts/agrobloc/contract.algo.ts:192
+    // smart_contracts/agrobloc/contract.algo.ts:196
     // @abimethod()
     callsub repay_investment
     intc_0 // 1
     return
 
-main_claim_investment_route@6:
-    // smart_contracts/agrobloc/contract.algo.ts:147
+main_claim_investment_route@7:
+    // smart_contracts/agrobloc/contract.algo.ts:151
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
     btoi
-    // smart_contracts/agrobloc/contract.algo.ts:147
+    // smart_contracts/agrobloc/contract.algo.ts:151
     // @abimethod()
     callsub claim_investment
     intc_0 // 1
     return
 
-main_create_investment_route@5:
-    // smart_contracts/agrobloc/contract.algo.ts:115
+main_create_investment_route@6:
+    // smart_contracts/agrobloc/contract.algo.ts:123
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txn GroupIndex
     intc_0 // 1
@@ -143,7 +143,10 @@ main_create_investment_route@5:
     btoi
     txna ApplicationArgs 3
     extract 2 0
-    // smart_contracts/agrobloc/contract.algo.ts:115
+    txna ApplicationArgs 4
+    btoi
+    txnas Assets
+    // smart_contracts/agrobloc/contract.algo.ts:123
     // @abimethod()
     callsub create_investment
     itob
@@ -154,15 +157,15 @@ main_create_investment_route@5:
     intc_0 // 1
     return
 
-main_list_property_route@4:
-    // smart_contracts/agrobloc/contract.algo.ts:87
+main_list_property_route@5:
+    // smart_contracts/agrobloc/contract.algo.ts:101
     // @abimethod()
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/agrobloc/contract.algo.ts:79
+    // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txna ApplicationArgs 1
     extract 2 0
@@ -172,9 +175,30 @@ main_list_property_route@4:
     extract 2 0
     txna ApplicationArgs 4
     extract 2 0
-    // smart_contracts/agrobloc/contract.algo.ts:87
+    txna ApplicationArgs 5
+    btoi
+    txnas Assets
+    // smart_contracts/agrobloc/contract.algo.ts:101
     // @abimethod()
     callsub list_property
+    intc_0 // 1
+    return
+
+main_tokenize_route@4:
+    // smart_contracts/agrobloc/contract.algo.ts:88
+    // @abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // smart_contracts/agrobloc/contract.algo.ts:80
+    // export class Agrobloc extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    // smart_contracts/agrobloc/contract.algo.ts:88
+    // @abimethod()
+    callsub tokenize
     itob
     bytec 5 // 0x151f7c75
     swap
@@ -184,7 +208,7 @@ main_list_property_route@4:
     return
 
 main_create_application_route@3:
-    // smart_contracts/agrobloc/contract.algo.ts:84
+    // smart_contracts/agrobloc/contract.algo.ts:85
     // @abimethod({ onCreate: 'require' })
     txn OnCompletion
     !
@@ -196,39 +220,32 @@ main_create_application_route@3:
     return
 
 
-// smart_contracts/agrobloc/contract.algo.ts::Agrobloc.list_property(title: bytes, value: uint64, latLong: bytes, address: bytes) -> uint64:
-list_property:
-    // smart_contracts/agrobloc/contract.algo.ts:87-93
+// smart_contracts/agrobloc/contract.algo.ts::Agrobloc.tokenize(title: bytes) -> uint64:
+tokenize:
+    // smart_contracts/agrobloc/contract.algo.ts:88-91
     // @abimethod()
-    // public list_property(
+    // public tokenize(
     //   title: string,
-    //   value: uint64,
-    //   latLong: string,
-    //   address: string
     // ): uint64 {
-    proto 4 1
-    // smart_contracts/agrobloc/contract.algo.ts:94
-    // assert(value > 0);
-    frame_dig -3
-    assert
-    // smart_contracts/agrobloc/contract.algo.ts:96-100
+    proto 1 1
+    // smart_contracts/agrobloc/contract.algo.ts:92-96
     // const response = itxn.assetConfig({
     //   assetName: title,
     //   total: 1,
     //   decimals: 0,
     // }).submit();
     itxn_begin
-    // smart_contracts/agrobloc/contract.algo.ts:99
+    // smart_contracts/agrobloc/contract.algo.ts:95
     // decimals: 0,
     intc_1 // 0
     itxn_field ConfigAssetDecimals
-    // smart_contracts/agrobloc/contract.algo.ts:98
+    // smart_contracts/agrobloc/contract.algo.ts:94
     // total: 1,
     intc_0 // 1
     itxn_field ConfigAssetTotal
-    frame_dig -4
+    frame_dig -1
     itxn_field ConfigAssetName
-    // smart_contracts/agrobloc/contract.algo.ts:96-100
+    // smart_contracts/agrobloc/contract.algo.ts:92-96
     // const response = itxn.assetConfig({
     //   assetName: title,
     //   total: 1,
@@ -240,57 +257,90 @@ list_property:
     itxn_field Fee
     itxn_submit
     itxn CreatedAssetID
-    // smart_contracts/agrobloc/contract.algo.ts:103
-    // title: new arc4.Str(title),
+    // smart_contracts/agrobloc/contract.algo.ts:98
+    // return response.createdAsset.id;
+    retsub
+
+
+// smart_contracts/agrobloc/contract.algo.ts::Agrobloc.list_property(title: bytes, value: uint64, latLong: bytes, address: bytes, asset: uint64) -> void:
+list_property:
+    // smart_contracts/agrobloc/contract.algo.ts:101-108
+    // @abimethod()
+    // public list_property(
+    //   title: string,
+    //   value: uint64,
+    //   latLong: string,
+    //   address: string,
+    //   asset: Asset,
+    // ) {
+    proto 5 0
+    // smart_contracts/agrobloc/contract.algo.ts:109
+    // assert(value > 0);
     frame_dig -4
+    assert
+    // smart_contracts/agrobloc/contract.algo.ts:110
+    // assert(!this.property(asset.id).exists);
+    frame_dig -1
+    itob
+    // smart_contracts/agrobloc/contract.algo.ts:81
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
+    bytec_1 // "property"
+    dig 1
+    concat
+    // smart_contracts/agrobloc/contract.algo.ts:110
+    // assert(!this.property(asset.id).exists);
+    dup
+    box_len
+    bury 1
+    !
+    assert
+    // smart_contracts/agrobloc/contract.algo.ts:113
+    // title: new arc4.Str(title),
+    frame_dig -5
     len
     itob
     extract 6 2
-    frame_dig -4
+    frame_dig -5
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:104
-    // asset: new arc4.UintN64(response.createdAsset.id),
-    dig 1
-    itob
-    // smart_contracts/agrobloc/contract.algo.ts:105
+    // smart_contracts/agrobloc/contract.algo.ts:115
     // owner: new arc4.Address(Txn.sender),
     txn Sender
-    // smart_contracts/agrobloc/contract.algo.ts:106
+    // smart_contracts/agrobloc/contract.algo.ts:116
     // latLong: new arc4.Str(latLong),
-    frame_dig -2
-    len
-    itob
-    extract 6 2
-    frame_dig -2
-    concat
-    // smart_contracts/agrobloc/contract.algo.ts:107
-    // address: new arc4.Str(address),
-    frame_dig -1
-    len
-    itob
-    extract 6 2
-    frame_dig -1
-    concat
-    // smart_contracts/agrobloc/contract.algo.ts:109
-    // value: new arc4.UintN64(value),
     frame_dig -3
+    len
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:102-110
-    // this.property(response.createdAsset.id).value = new Property({
+    extract 6 2
+    frame_dig -3
+    concat
+    // smart_contracts/agrobloc/contract.algo.ts:117
+    // address: new arc4.Str(address),
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    // smart_contracts/agrobloc/contract.algo.ts:119
+    // value: new arc4.UintN64(value),
+    frame_dig -4
+    itob
+    // smart_contracts/agrobloc/contract.algo.ts:112-120
+    // this.property(asset.id).value = new Property({
     //   title: new arc4.Str(title),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   latLong: new arc4.Str(latLong),
     //   address: new arc4.Str(address),
     //   investment: new arc4.UintN64(0),
     //   value: new arc4.UintN64(value),
     // });
-    dig 5
+    dig 4
     len
     pushint 62 // 62
     +
     bytec_3 // 0x003e
-    dig 6
+    uncover 8
     concat
     uncover 2
     concat
@@ -307,13 +357,13 @@ list_property:
     itob
     extract 6 2
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:108
+    // smart_contracts/agrobloc/contract.algo.ts:118
     // investment: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:102-110
-    // this.property(response.createdAsset.id).value = new Property({
+    // smart_contracts/agrobloc/contract.algo.ts:112-120
+    // this.property(asset.id).value = new Property({
     //   title: new arc4.Str(title),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   latLong: new arc4.Str(latLong),
     //   address: new arc4.Str(address),
@@ -321,117 +371,83 @@ list_property:
     //   value: new arc4.UintN64(value),
     // });
     concat
-    uncover 4
+    uncover 3
     concat
     uncover 2
     concat
     swap
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:80
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
-    bytec_1 // "property"
-    uncover 2
-    concat
-    // smart_contracts/agrobloc/contract.algo.ts:102-110
-    // this.property(response.createdAsset.id).value = new Property({
-    //   title: new arc4.Str(title),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
-    //   owner: new arc4.Address(Txn.sender),
-    //   latLong: new arc4.Str(latLong),
-    //   address: new arc4.Str(address),
-    //   investment: new arc4.UintN64(0),
-    //   value: new arc4.UintN64(value),
-    // });
-    dup
+    dig 1
     box_del
     pop
-    swap
     box_put
-    // smart_contracts/agrobloc/contract.algo.ts:112
-    // return response.createdAsset.id;
     retsub
 
 
-// smart_contracts/agrobloc/contract.algo.ts::Agrobloc.create_investment(paymentTxn: uint64, apy: uint64, maturityDuration: uint64, ownerTitle: bytes) -> uint64:
+// smart_contracts/agrobloc/contract.algo.ts::Agrobloc.create_investment(paymentTxn: uint64, apy: uint64, maturityDuration: uint64, ownerTitle: bytes, asset: uint64) -> uint64:
 create_investment:
-    // smart_contracts/agrobloc/contract.algo.ts:115-121
+    // smart_contracts/agrobloc/contract.algo.ts:123-130
     // @abimethod()
     // public create_investment(
     //   paymentTxn: gtxn.PaymentTxn,
     //   apy: uint64,
     //   maturityDuration: uint64,
     //   ownerTitle: string,
+    //   asset: Asset,
     // ): uint64 {
-    proto 4 1
-    // smart_contracts/agrobloc/contract.algo.ts:122
+    proto 5 1
+    // smart_contracts/agrobloc/contract.algo.ts:131
     // assert(paymentTxn.amount > 0);
-    frame_dig -4
+    frame_dig -5
     gtxns Amount
     dup
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:124-128
-    // const response = itxn.assetConfig({
-    //   assetName: ownerTitle,
-    //   total: 1,
-    //   decimals: 0,
-    // }).submit();
-    itxn_begin
-    // smart_contracts/agrobloc/contract.algo.ts:127
-    // decimals: 0,
-    intc_1 // 0
-    itxn_field ConfigAssetDecimals
-    // smart_contracts/agrobloc/contract.algo.ts:126
-    // total: 1,
-    intc_0 // 1
-    itxn_field ConfigAssetTotal
+    // smart_contracts/agrobloc/contract.algo.ts:132
+    // assert(!this.investment(asset.id).exists);
     frame_dig -1
-    itxn_field ConfigAssetName
-    // smart_contracts/agrobloc/contract.algo.ts:124-128
-    // const response = itxn.assetConfig({
-    //   assetName: ownerTitle,
-    //   total: 1,
-    //   decimals: 0,
-    // }).submit();
-    pushint 3 // 3
-    itxn_field TypeEnum
-    intc_1 // 0
-    itxn_field Fee
-    itxn_submit
-    itxn CreatedAssetID
-    // smart_contracts/agrobloc/contract.algo.ts:131
+    itob
+    // smart_contracts/agrobloc/contract.algo.ts:83
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+    bytec_2 // "investment"
+    dig 1
+    concat
+    // smart_contracts/agrobloc/contract.algo.ts:132
+    // assert(!this.investment(asset.id).exists);
+    dup
+    box_len
+    bury 1
+    !
+    assert
+    // smart_contracts/agrobloc/contract.algo.ts:135
     // ownerTitle: new arc4.Str(ownerTitle),
-    frame_dig -1
+    frame_dig -2
     len
     itob
     extract 6 2
-    frame_dig -1
+    frame_dig -2
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:132
-    // asset: new arc4.UintN64(response.createdAsset.id),
-    dig 1
-    itob
-    // smart_contracts/agrobloc/contract.algo.ts:133
+    // smart_contracts/agrobloc/contract.algo.ts:137
     // owner: new arc4.Address(Txn.sender),
     txn Sender
-    // smart_contracts/agrobloc/contract.algo.ts:134
+    // smart_contracts/agrobloc/contract.algo.ts:138
     // apy: new arc4.UintN64(apy),
+    frame_dig -4
+    itob
+    // smart_contracts/agrobloc/contract.algo.ts:139
+    // maturityDuration: new arc4.UintN64(maturityDuration),
     frame_dig -3
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:135
-    // maturityDuration: new arc4.UintN64(maturityDuration),
-    frame_dig -2
-    itob
-    // smart_contracts/agrobloc/contract.algo.ts:137
+    // smart_contracts/agrobloc/contract.algo.ts:141
     // claimer: new arc4.Address(Global.zeroAddress),
     global ZeroAddress
-    // smart_contracts/agrobloc/contract.algo.ts:138
+    // smart_contracts/agrobloc/contract.algo.ts:142
     // value: new arc4.UintN64(paymentTxn.amount),
     uncover 7
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:130-142
-    // this.investment(response.createdAsset.id).value = new Investment({
+    // smart_contracts/agrobloc/contract.algo.ts:134-146
+    // this.investment(asset.id).value = new Investment({
     //   ownerTitle: new arc4.Str(ownerTitle),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   apy: new arc4.UintN64(apy),
     //   maturityDuration: new arc4.UintN64(maturityDuration),
@@ -445,13 +461,13 @@ create_investment:
     uncover 3
     uncover 3
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:136
+    // smart_contracts/agrobloc/contract.algo.ts:140
     // timeClaimed: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:130-142
-    // this.investment(response.createdAsset.id).value = new Investment({
+    // smart_contracts/agrobloc/contract.algo.ts:134-146
+    // this.investment(asset.id).value = new Investment({
     //   ownerTitle: new arc4.Str(ownerTitle),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   apy: new arc4.UintN64(apy),
     //   maturityDuration: new arc4.UintN64(maturityDuration),
@@ -471,13 +487,13 @@ create_investment:
     concat
     swap
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:139
+    // smart_contracts/agrobloc/contract.algo.ts:143
     // amountRepaid: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:130-142
-    // this.investment(response.createdAsset.id).value = new Investment({
+    // smart_contracts/agrobloc/contract.algo.ts:134-146
+    // this.investment(asset.id).value = new Investment({
     //   ownerTitle: new arc4.Str(ownerTitle),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   apy: new arc4.UintN64(apy),
     //   maturityDuration: new arc4.UintN64(maturityDuration),
@@ -489,13 +505,13 @@ create_investment:
     //   collateral: new arc4.UintN64(0),
     // });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:140
+    // smart_contracts/agrobloc/contract.algo.ts:144
     // amountToRepay: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:130-142
-    // this.investment(response.createdAsset.id).value = new Investment({
+    // smart_contracts/agrobloc/contract.algo.ts:134-146
+    // this.investment(asset.id).value = new Investment({
     //   ownerTitle: new arc4.Str(ownerTitle),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   apy: new arc4.UintN64(apy),
     //   maturityDuration: new arc4.UintN64(maturityDuration),
@@ -507,15 +523,15 @@ create_investment:
     //   collateral: new arc4.UintN64(0),
     // });
     concat
-    dig 1
+    uncover 3
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:141
+    // smart_contracts/agrobloc/contract.algo.ts:145
     // collateral: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:130-142
-    // this.investment(response.createdAsset.id).value = new Investment({
+    // smart_contracts/agrobloc/contract.algo.ts:134-146
+    // this.investment(asset.id).value = new Investment({
     //   ownerTitle: new arc4.Str(ownerTitle),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
+    //   asset: new arc4.UintN64(asset.id),
     //   owner: new arc4.Address(Txn.sender),
     //   apy: new arc4.UintN64(apy),
     //   maturityDuration: new arc4.UintN64(maturityDuration),
@@ -527,63 +543,44 @@ create_investment:
     //   collateral: new arc4.UintN64(0),
     // });
     concat
-    uncover 2
+    swap
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:82
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
-    bytec_2 // "investment"
-    uncover 2
-    concat
-    // smart_contracts/agrobloc/contract.algo.ts:130-142
-    // this.investment(response.createdAsset.id).value = new Investment({
-    //   ownerTitle: new arc4.Str(ownerTitle),
-    //   asset: new arc4.UintN64(response.createdAsset.id),
-    //   owner: new arc4.Address(Txn.sender),
-    //   apy: new arc4.UintN64(apy),
-    //   maturityDuration: new arc4.UintN64(maturityDuration),
-    //   timeClaimed: new arc4.UintN64(0),
-    //   claimer: new arc4.Address(Global.zeroAddress),
-    //   value: new arc4.UintN64(paymentTxn.amount),
-    //   amountRepaid: new arc4.UintN64(0),
-    //   amountToRepay: new arc4.UintN64(0),
-    //   collateral: new arc4.UintN64(0),
-    // });
-    dup
+    dig 1
     box_del
     pop
-    swap
     box_put
-    // smart_contracts/agrobloc/contract.algo.ts:144
-    // return response.createdAsset.id;
+    // smart_contracts/agrobloc/contract.algo.ts:148
+    // return asset.id;
+    frame_dig -1
     retsub
 
 
 // smart_contracts/agrobloc/contract.algo.ts::Agrobloc.claim_investment(investment: uint64, collateral: uint64) -> void:
 claim_investment:
-    // smart_contracts/agrobloc/contract.algo.ts:147-148
+    // smart_contracts/agrobloc/contract.algo.ts:151-152
     // @abimethod()
     // public claim_investment(investment: uint64, collateral: uint64) {
     proto 2 0
-    // smart_contracts/agrobloc/contract.algo.ts:149
+    // smart_contracts/agrobloc/contract.algo.ts:153
     // const investment_to_claim = this.investment(investment);
     frame_dig -2
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     bytec_2 // "investment"
-    // smart_contracts/agrobloc/contract.algo.ts:149
+    // smart_contracts/agrobloc/contract.algo.ts:153
     // const investment_to_claim = this.investment(investment);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:150
+    // smart_contracts/agrobloc/contract.algo.ts:154
     // assert(investment_to_claim.exists);
     dup
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:151
+    // smart_contracts/agrobloc/contract.algo.ts:155
     // assert(investment_to_claim.value.timeClaimed.native === 0);
     dup
     box_get
@@ -592,7 +589,7 @@ claim_investment:
     extract_uint64
     !
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:152
+    // smart_contracts/agrobloc/contract.algo.ts:156
     // assert(investment_to_claim.value.claimer.native === Global.zeroAddress);
     dup
     box_get
@@ -601,26 +598,26 @@ claim_investment:
     global ZeroAddress
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:154
+    // smart_contracts/agrobloc/contract.algo.ts:158
     // const property = this.property(collateral);
     frame_dig -1
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     bytec_1 // "property"
-    // smart_contracts/agrobloc/contract.algo.ts:154
+    // smart_contracts/agrobloc/contract.algo.ts:158
     // const property = this.property(collateral);
     dig 1
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:155
+    // smart_contracts/agrobloc/contract.algo.ts:159
     // assert(property.exists);
     dup
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:156
+    // smart_contracts/agrobloc/contract.algo.ts:160
     // assert(property.value.owner.native === Txn.sender);
     dup
     box_get
@@ -629,7 +626,7 @@ claim_investment:
     txn Sender
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:157
+    // smart_contracts/agrobloc/contract.algo.ts:161
     // assert(property.value.investment.native === 0);
     dup
     box_get
@@ -638,7 +635,7 @@ claim_investment:
     extract_uint64
     !
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:158
+    // smart_contracts/agrobloc/contract.algo.ts:162
     // assert(property.value.value.native * 3 / 4 >= investment_to_claim.value.value.native);
     dup
     box_get
@@ -656,16 +653,16 @@ claim_investment:
     extract_uint64
     >=
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:160-163
+    // smart_contracts/agrobloc/contract.algo.ts:164-167
     // itxn.payment({
     //   receiver: Txn.sender,
     //   amount: investment_to_claim.value.value.native,
     // }).submit();
     itxn_begin
-    // smart_contracts/agrobloc/contract.algo.ts:161
+    // smart_contracts/agrobloc/contract.algo.ts:165
     // receiver: Txn.sender,
     txn Sender
-    // smart_contracts/agrobloc/contract.algo.ts:162
+    // smart_contracts/agrobloc/contract.algo.ts:166
     // amount: investment_to_claim.value.value.native,
     dig 3
     box_get
@@ -674,7 +671,7 @@ claim_investment:
     extract_uint64
     itxn_field Amount
     itxn_field Receiver
-    // smart_contracts/agrobloc/contract.algo.ts:160-163
+    // smart_contracts/agrobloc/contract.algo.ts:164-167
     // itxn.payment({
     //   receiver: Txn.sender,
     //   amount: investment_to_claim.value.value.native,
@@ -684,7 +681,7 @@ claim_investment:
     intc_1 // 0
     itxn_field Fee
     itxn_submit
-    // smart_contracts/agrobloc/contract.algo.ts:166
+    // smart_contracts/agrobloc/contract.algo.ts:170
     // title: property.value.title,
     dup
     box_get
@@ -696,19 +693,19 @@ claim_investment:
     intc_2 // 50
     extract_uint16
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:167
+    // smart_contracts/agrobloc/contract.algo.ts:171
     // asset: property.value.asset,
     dig 1
     box_get
     assert // Box must have value
     extract 2 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:168
+    // smart_contracts/agrobloc/contract.algo.ts:172
     // owner: property.value.owner,
     dig 2
     box_get
     assert // Box must have value
     extract 18 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:169
+    // smart_contracts/agrobloc/contract.algo.ts:173
     // latLong: property.value.latLong,
     dig 3
     box_get
@@ -720,7 +717,7 @@ claim_investment:
     intc_3 // 52
     extract_uint16
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:170
+    // smart_contracts/agrobloc/contract.algo.ts:174
     // address: property.value.address,
     dig 4
     box_get
@@ -731,19 +728,19 @@ claim_investment:
     dig 1
     len
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:171
+    // smart_contracts/agrobloc/contract.algo.ts:175
     // investment: investment_to_claim.value.asset,
     dig 7
     box_get
     assert // Box must have value
     extract 114 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:172
+    // smart_contracts/agrobloc/contract.algo.ts:176
     // value: property.value.value,
     dig 6
     box_get
     assert // Box must have value
     extract 10 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:165-173
+    // smart_contracts/agrobloc/contract.algo.ts:169-177
     // property.value = new Property({
     //   title: property.value.title,
     //   asset: property.value.asset,
@@ -787,7 +784,7 @@ claim_investment:
     box_del
     pop
     box_put
-    // smart_contracts/agrobloc/contract.algo.ts:175
+    // smart_contracts/agrobloc/contract.algo.ts:179
     // const amountToRepay = Uint64(investment_to_claim.value.value.native +  investment_to_claim.value.apy.native / 100 * investment_to_claim.value.value.native)
     dig 1
     box_get
@@ -808,7 +805,7 @@ claim_investment:
     extract_uint64
     *
     +
-    // smart_contracts/agrobloc/contract.algo.ts:178
+    // smart_contracts/agrobloc/contract.algo.ts:182
     // ownerTitle: investment_to_claim.value.ownerTitle,
     dig 2
     box_get
@@ -819,48 +816,48 @@ claim_investment:
     dig 1
     len
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:179
+    // smart_contracts/agrobloc/contract.algo.ts:183
     // asset: investment_to_claim.value.asset,
     dig 3
     box_get
     assert // Box must have value
     extract 114 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:180
+    // smart_contracts/agrobloc/contract.algo.ts:184
     // owner: investment_to_claim.value.owner,
     dig 4
     box_get
     assert // Box must have value
     extract 24 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:181
+    // smart_contracts/agrobloc/contract.algo.ts:185
     // apy: investment_to_claim.value.apy,
     dig 5
     box_get
     assert // Box must have value
     extract 0 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:182
+    // smart_contracts/agrobloc/contract.algo.ts:186
     // maturityDuration: investment_to_claim.value.maturityDuration,
     dig 6
     box_get
     assert // Box must have value
     extract 8 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:183
+    // smart_contracts/agrobloc/contract.algo.ts:187
     // timeClaimed: new arc4.UintN64(Global.latestTimestamp),
     global LatestTimestamp
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:184
+    // smart_contracts/agrobloc/contract.algo.ts:188
     // claimer: new arc4.Address(Txn.sender),
     txn Sender
-    // smart_contracts/agrobloc/contract.algo.ts:185
+    // smart_contracts/agrobloc/contract.algo.ts:189
     // value: investment_to_claim.value.value,
     dig 9
     box_get
     assert // Box must have value
     extract 90 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:187
+    // smart_contracts/agrobloc/contract.algo.ts:191
     // amountToRepay: new arc4.UintN64(amountToRepay),
     uncover 8
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:177-189
+    // smart_contracts/agrobloc/contract.algo.ts:181-193
     // investment_to_claim.value = new Investment({
     //   ownerTitle: investment_to_claim.value.ownerTitle,
     //   asset: investment_to_claim.value.asset,
@@ -887,10 +884,10 @@ claim_investment:
     concat
     uncover 2
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:186
+    // smart_contracts/agrobloc/contract.algo.ts:190
     // amountRepaid: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:177-189
+    // smart_contracts/agrobloc/contract.algo.ts:181-193
     // investment_to_claim.value = new Investment({
     //   ownerTitle: investment_to_claim.value.ownerTitle,
     //   asset: investment_to_claim.value.asset,
@@ -922,35 +919,35 @@ claim_investment:
 
 // smart_contracts/agrobloc/contract.algo.ts::Agrobloc.repay_investment(payment: uint64, investment: uint64) -> void:
 repay_investment:
-    // smart_contracts/agrobloc/contract.algo.ts:192-196
+    // smart_contracts/agrobloc/contract.algo.ts:196-200
     // @abimethod()
     // public repay_investment(
     //   payment: gtxn.PaymentTxn,
     //   investment: uint64
     // ) {
     proto 2 0
-    // smart_contracts/agrobloc/contract.algo.ts:197
+    // smart_contracts/agrobloc/contract.algo.ts:201
     // const investment_to_repay = this.investment(investment);
     frame_dig -1
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     bytec_2 // "investment"
-    // smart_contracts/agrobloc/contract.algo.ts:197
+    // smart_contracts/agrobloc/contract.algo.ts:201
     // const investment_to_repay = this.investment(investment);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:197
+    // smart_contracts/agrobloc/contract.algo.ts:201
     // const investment_to_repay = this.investment(investment);
     dupn 2
-    // smart_contracts/agrobloc/contract.algo.ts:198
+    // smart_contracts/agrobloc/contract.algo.ts:202
     // assert(investment_to_repay.exists);
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:199
+    // smart_contracts/agrobloc/contract.algo.ts:203
     // assert(investment_to_repay.value.claimer.native === Txn.sender);
     dup
     box_get
@@ -959,7 +956,7 @@ repay_investment:
     txn Sender
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:201
+    // smart_contracts/agrobloc/contract.algo.ts:205
     // payment.amount <= investment_to_repay.value.amountToRepay.native - investment_to_repay.value.amountRepaid.native
     frame_dig -2
     gtxns Amount
@@ -976,23 +973,23 @@ repay_investment:
     -
     dig 1
     >=
-    // smart_contracts/agrobloc/contract.algo.ts:200-202
+    // smart_contracts/agrobloc/contract.algo.ts:204-206
     // assert(
     //   payment.amount <= investment_to_repay.value.amountToRepay.native - investment_to_repay.value.amountRepaid.native
     // );
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:203
+    // smart_contracts/agrobloc/contract.algo.ts:207
     // assert(payment.receiver === Global.currentApplicationAddress);
     frame_dig -2
     gtxns Receiver
     global CurrentApplicationAddress
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:204
+    // smart_contracts/agrobloc/contract.algo.ts:208
     // assert(payment.amount > 0);
     dup
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:207
+    // smart_contracts/agrobloc/contract.algo.ts:211
     // investment_to_repay.value.timeClaimed.native + investment_to_repay.value.maturityDuration.native < Global.latestTimestamp;
     dig 1
     box_get
@@ -1007,17 +1004,17 @@ repay_investment:
     +
     global LatestTimestamp
     <
-    // smart_contracts/agrobloc/contract.algo.ts:209
+    // smart_contracts/agrobloc/contract.algo.ts:213
     // assert(!isOverdue);
     !
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:211-214
+    // smart_contracts/agrobloc/contract.algo.ts:215-218
     // itxn.payment({
     //   receiver: investment_to_repay.value.owner.native,
     //   amount: payment.amount,
     // }).submit();
     itxn_begin
-    // smart_contracts/agrobloc/contract.algo.ts:212
+    // smart_contracts/agrobloc/contract.algo.ts:216
     // receiver: investment_to_repay.value.owner.native,
     dig 1
     box_get
@@ -1026,7 +1023,7 @@ repay_investment:
     dig 1
     itxn_field Amount
     itxn_field Receiver
-    // smart_contracts/agrobloc/contract.algo.ts:211-214
+    // smart_contracts/agrobloc/contract.algo.ts:215-218
     // itxn.payment({
     //   receiver: investment_to_repay.value.owner.native,
     //   amount: payment.amount,
@@ -1036,7 +1033,7 @@ repay_investment:
     intc_1 // 0
     itxn_field Fee
     itxn_submit
-    // smart_contracts/agrobloc/contract.algo.ts:216
+    // smart_contracts/agrobloc/contract.algo.ts:220
     // const amountRepaid = Uint64(investment_to_repay.value.amountRepaid.native + payment.amount);
     dig 1
     box_get
@@ -1044,7 +1041,7 @@ repay_investment:
     pushint 98 // 98
     extract_uint64
     +
-    // smart_contracts/agrobloc/contract.algo.ts:219
+    // smart_contracts/agrobloc/contract.algo.ts:223
     // ownerTitle: investment_to_repay.value.ownerTitle,
     dig 1
     box_get
@@ -1055,65 +1052,65 @@ repay_investment:
     dig 1
     len
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:220
+    // smart_contracts/agrobloc/contract.algo.ts:224
     // asset: investment_to_repay.value.asset,
     dig 2
     box_get
     assert // Box must have value
     extract 114 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:221
+    // smart_contracts/agrobloc/contract.algo.ts:225
     // owner: investment_to_repay.value.owner,
     dig 3
     box_get
     assert // Box must have value
     extract 24 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:222
+    // smart_contracts/agrobloc/contract.algo.ts:226
     // apy: investment_to_repay.value.apy,
     dig 4
     box_get
     assert // Box must have value
     extract 0 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:223
+    // smart_contracts/agrobloc/contract.algo.ts:227
     // maturityDuration: investment_to_repay.value.maturityDuration,
     dig 5
     box_get
     assert // Box must have value
     extract 8 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:224
+    // smart_contracts/agrobloc/contract.algo.ts:228
     // timeClaimed: investment_to_repay.value.timeClaimed,
     dig 6
     box_get
     assert // Box must have value
     extract 16 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:225
+    // smart_contracts/agrobloc/contract.algo.ts:229
     // claimer: investment_to_repay.value.claimer,
     dig 7
     box_get
     assert // Box must have value
     extract 58 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:226
+    // smart_contracts/agrobloc/contract.algo.ts:230
     // value: investment_to_repay.value.value,
     dig 8
     box_get
     assert // Box must have value
     extract 90 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:227
+    // smart_contracts/agrobloc/contract.algo.ts:231
     // amountRepaid: new arc4.UintN64(amountRepaid),
     dig 8
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:228
+    // smart_contracts/agrobloc/contract.algo.ts:232
     // amountToRepay: investment_to_repay.value.amountToRepay,
     dig 10
     box_get
     assert // Box must have value
     extract 106 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:229
+    // smart_contracts/agrobloc/contract.algo.ts:233
     // collateral: investment_to_repay.value.collateral,
     dig 11
     box_get
     assert // Box must have value
     extract 122 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:218-230
+    // smart_contracts/agrobloc/contract.algo.ts:222-234
     // investment_to_repay.value = new Investment({
     //   ownerTitle: investment_to_repay.value.ownerTitle,
     //   asset: investment_to_repay.value.asset,
@@ -1156,7 +1153,7 @@ repay_investment:
     dig 2
     swap
     box_put
-    // smart_contracts/agrobloc/contract.algo.ts:232
+    // smart_contracts/agrobloc/contract.algo.ts:236
     // if (amountRepaid === investment_to_repay.value.amountRepaid.native) {
     swap
     box_get
@@ -1165,7 +1162,7 @@ repay_investment:
     extract_uint64
     ==
     bz repay_investment_after_if_else@3
-    // smart_contracts/agrobloc/contract.algo.ts:233
+    // smart_contracts/agrobloc/contract.algo.ts:237
     // const collateral = this.property(investment_to_repay.value.collateral.native);
     frame_dig 0
     dup
@@ -1174,22 +1171,22 @@ repay_investment:
     pushint 122 // 122
     extract_uint64
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     bytec_1 // "property"
-    // smart_contracts/agrobloc/contract.algo.ts:233
+    // smart_contracts/agrobloc/contract.algo.ts:237
     // const collateral = this.property(investment_to_repay.value.collateral.native);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:235
+    // smart_contracts/agrobloc/contract.algo.ts:239
     // assert(collateral.exists);
     dup
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:236
+    // smart_contracts/agrobloc/contract.algo.ts:240
     // assert(collateral.value.investment.native === investment_to_repay.value.asset.native);
     dup
     box_get
@@ -1203,7 +1200,7 @@ repay_investment:
     extract_uint64
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:239
+    // smart_contracts/agrobloc/contract.algo.ts:243
     // title: collateral.value.title,
     dup
     box_get
@@ -1215,19 +1212,19 @@ repay_investment:
     intc_2 // 50
     extract_uint16
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:240
+    // smart_contracts/agrobloc/contract.algo.ts:244
     // asset: collateral.value.asset,
     dig 1
     box_get
     assert // Box must have value
     extract 2 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:241
+    // smart_contracts/agrobloc/contract.algo.ts:245
     // owner: collateral.value.owner,
     dig 2
     box_get
     assert // Box must have value
     extract 18 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:242
+    // smart_contracts/agrobloc/contract.algo.ts:246
     // latLong: collateral.value.latLong,
     dig 3
     box_get
@@ -1239,7 +1236,7 @@ repay_investment:
     intc_3 // 52
     extract_uint16
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:243
+    // smart_contracts/agrobloc/contract.algo.ts:247
     // address: collateral.value.address,
     dig 4
     box_get
@@ -1250,13 +1247,13 @@ repay_investment:
     dig 1
     len
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:245
+    // smart_contracts/agrobloc/contract.algo.ts:249
     // value: collateral.value.value,
     dig 5
     box_get
     assert // Box must have value
     extract 10 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:238-246
+    // smart_contracts/agrobloc/contract.algo.ts:242-250
     // collateral.value = new Property({
     //   title: collateral.value.title,
     //   asset: collateral.value.asset,
@@ -1288,10 +1285,10 @@ repay_investment:
     itob
     extract 6 2
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:244
+    // smart_contracts/agrobloc/contract.algo.ts:248
     // investment: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:238-246
+    // smart_contracts/agrobloc/contract.algo.ts:242-250
     // collateral.value = new Property({
     //   title: collateral.value.title,
     //   asset: collateral.value.asset,
@@ -1319,30 +1316,30 @@ repay_investment_after_if_else@3:
 
 // smart_contracts/agrobloc/contract.algo.ts::Agrobloc.delete_investment(investment: uint64) -> void:
 delete_investment:
-    // smart_contracts/agrobloc/contract.algo.ts:250-251
+    // smart_contracts/agrobloc/contract.algo.ts:254-255
     // @abimethod()
     // public delete_investment(investment: uint64) {
     proto 1 0
-    // smart_contracts/agrobloc/contract.algo.ts:252
+    // smart_contracts/agrobloc/contract.algo.ts:256
     // const investment_to_delete = this.investment(investment);
     frame_dig -1
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     bytec_2 // "investment"
-    // smart_contracts/agrobloc/contract.algo.ts:252
+    // smart_contracts/agrobloc/contract.algo.ts:256
     // const investment_to_delete = this.investment(investment);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:253
+    // smart_contracts/agrobloc/contract.algo.ts:257
     // assert(investment_to_delete.exists);
     dup
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:254
+    // smart_contracts/agrobloc/contract.algo.ts:258
     // assert(investment_to_delete.value.timeClaimed.native === 0);
     dup
     box_get
@@ -1351,7 +1348,7 @@ delete_investment:
     extract_uint64
     !
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:255
+    // smart_contracts/agrobloc/contract.algo.ts:259
     // assert(investment_to_delete.value.claimer.native === Global.zeroAddress);
     dup
     box_get
@@ -1360,7 +1357,7 @@ delete_investment:
     global ZeroAddress
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:256
+    // smart_contracts/agrobloc/contract.algo.ts:260
     // assert(investment_to_delete.value.owner.native === Txn.sender);
     dup
     box_get
@@ -1369,7 +1366,7 @@ delete_investment:
     txn Sender
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:257
+    // smart_contracts/agrobloc/contract.algo.ts:261
     // assert(investment_to_delete.value.collateral.native === 0)
     dup
     box_get
@@ -1378,16 +1375,16 @@ delete_investment:
     extract_uint64
     !
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:259-262
+    // smart_contracts/agrobloc/contract.algo.ts:263-266
     // itxn.payment({
     //   receiver: Txn.sender,
     //   amount: investment_to_delete.value.value.native,
     // }).submit();
     itxn_begin
-    // smart_contracts/agrobloc/contract.algo.ts:260
+    // smart_contracts/agrobloc/contract.algo.ts:264
     // receiver: Txn.sender,
     txn Sender
-    // smart_contracts/agrobloc/contract.algo.ts:261
+    // smart_contracts/agrobloc/contract.algo.ts:265
     // amount: investment_to_delete.value.value.native,
     dig 1
     box_get
@@ -1396,7 +1393,7 @@ delete_investment:
     extract_uint64
     itxn_field Amount
     itxn_field Receiver
-    // smart_contracts/agrobloc/contract.algo.ts:259-262
+    // smart_contracts/agrobloc/contract.algo.ts:263-266
     // itxn.payment({
     //   receiver: Txn.sender,
     //   amount: investment_to_delete.value.value.native,
@@ -1406,7 +1403,7 @@ delete_investment:
     intc_1 // 0
     itxn_field Fee
     itxn_submit
-    // smart_contracts/agrobloc/contract.algo.ts:264
+    // smart_contracts/agrobloc/contract.algo.ts:268
     // investment_to_delete.delete();
     box_del
     pop
@@ -1415,30 +1412,30 @@ delete_investment:
 
 // smart_contracts/agrobloc/contract.algo.ts::Agrobloc.claim_overdue_investment(investment: uint64) -> void:
 claim_overdue_investment:
-    // smart_contracts/agrobloc/contract.algo.ts:267-268
+    // smart_contracts/agrobloc/contract.algo.ts:271-272
     // @abimethod()
     // public claim_overdue_investment(investment: uint64) {
     proto 1 0
-    // smart_contracts/agrobloc/contract.algo.ts:269
+    // smart_contracts/agrobloc/contract.algo.ts:273
     // const investment_to_claim = this.investment(investment);
     frame_dig -1
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     bytec_2 // "investment"
-    // smart_contracts/agrobloc/contract.algo.ts:269
+    // smart_contracts/agrobloc/contract.algo.ts:273
     // const investment_to_claim = this.investment(investment);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:82
+    // smart_contracts/agrobloc/contract.algo.ts:83
     // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:270
+    // smart_contracts/agrobloc/contract.algo.ts:274
     // assert(investment_to_claim.exists);
     dup
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:271
+    // smart_contracts/agrobloc/contract.algo.ts:275
     // assert(investment_to_claim.value.owner.native === Txn.sender);
     dup
     box_get
@@ -1447,7 +1444,7 @@ claim_overdue_investment:
     txn Sender
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:272
+    // smart_contracts/agrobloc/contract.algo.ts:276
     // assert(investment_to_claim.value.claimer.native !== Global.zeroAddress);
     dup
     box_get
@@ -1456,7 +1453,7 @@ claim_overdue_investment:
     global ZeroAddress
     !=
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:273
+    // smart_contracts/agrobloc/contract.algo.ts:277
     // assert(investment_to_claim.value.amountToRepay.native > 0);
     dup
     box_get
@@ -1464,7 +1461,7 @@ claim_overdue_investment:
     pushint 106 // 106
     extract_uint64
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:274
+    // smart_contracts/agrobloc/contract.algo.ts:278
     // assert(investment_to_claim.value.amountRepaid.native < investment_to_claim.value.amountToRepay.native);
     dup
     box_get
@@ -1478,7 +1475,7 @@ claim_overdue_investment:
     extract_uint64
     <
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:277
+    // smart_contracts/agrobloc/contract.algo.ts:281
     // investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native < Global.latestTimestamp;
     dup
     box_get
@@ -1493,10 +1490,10 @@ claim_overdue_investment:
     +
     global LatestTimestamp
     <
-    // smart_contracts/agrobloc/contract.algo.ts:279
+    // smart_contracts/agrobloc/contract.algo.ts:283
     // assert(isOverdue);
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:280
+    // smart_contracts/agrobloc/contract.algo.ts:284
     // const collateral = this.property(investment_to_claim.value.collateral.native);
     dup
     box_get
@@ -1504,16 +1501,16 @@ claim_overdue_investment:
     pushint 122 // 122
     extract_uint64
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     bytec_1 // "property"
-    // smart_contracts/agrobloc/contract.algo.ts:280
+    // smart_contracts/agrobloc/contract.algo.ts:284
     // const collateral = this.property(investment_to_claim.value.collateral.native);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:282
+    // smart_contracts/agrobloc/contract.algo.ts:286
     // assert(collateral.value.investment.native === investment_to_claim.value.asset.native);
     dup
     box_get
@@ -1527,7 +1524,7 @@ claim_overdue_investment:
     extract_uint64
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:285
+    // smart_contracts/agrobloc/contract.algo.ts:289
     // title: collateral.value.title,
     dup
     box_get
@@ -1539,16 +1536,16 @@ claim_overdue_investment:
     intc_2 // 50
     extract_uint16
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:286
+    // smart_contracts/agrobloc/contract.algo.ts:290
     // asset: collateral.value.asset,
     dig 1
     box_get
     assert // Box must have value
     extract 2 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:287
+    // smart_contracts/agrobloc/contract.algo.ts:291
     // owner: new arc4.Address(Txn.sender),
     txn Sender
-    // smart_contracts/agrobloc/contract.algo.ts:288
+    // smart_contracts/agrobloc/contract.algo.ts:292
     // latLong: collateral.value.latLong,
     dig 3
     box_get
@@ -1560,7 +1557,7 @@ claim_overdue_investment:
     intc_3 // 52
     extract_uint16
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:289
+    // smart_contracts/agrobloc/contract.algo.ts:293
     // address: collateral.value.address,
     dig 4
     box_get
@@ -1571,13 +1568,13 @@ claim_overdue_investment:
     dig 1
     len
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:291
+    // smart_contracts/agrobloc/contract.algo.ts:295
     // value: collateral.value.value,
     dig 5
     box_get
     assert // Box must have value
     extract 10 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:284-292
+    // smart_contracts/agrobloc/contract.algo.ts:288-296
     // collateral.value = new Property({
     //   title: collateral.value.title,
     //   asset: collateral.value.asset,
@@ -1609,10 +1606,10 @@ claim_overdue_investment:
     itob
     extract 6 2
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:290
+    // smart_contracts/agrobloc/contract.algo.ts:294
     // investment: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:284-292
+    // smart_contracts/agrobloc/contract.algo.ts:288-296
     // collateral.value = new Property({
     //   title: collateral.value.title,
     //   asset: collateral.value.asset,
@@ -1633,7 +1630,7 @@ claim_overdue_investment:
     box_del
     pop
     box_put
-    // smart_contracts/agrobloc/contract.algo.ts:295
+    // smart_contracts/agrobloc/contract.algo.ts:299
     // ownerTitle: investment_to_claim.value.ownerTitle,
     dup
     box_get
@@ -1644,61 +1641,61 @@ claim_overdue_investment:
     dig 1
     len
     substring3
-    // smart_contracts/agrobloc/contract.algo.ts:296
+    // smart_contracts/agrobloc/contract.algo.ts:300
     // asset: investment_to_claim.value.asset,
     dig 1
     box_get
     assert // Box must have value
     extract 114 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:297
+    // smart_contracts/agrobloc/contract.algo.ts:301
     // owner: investment_to_claim.value.owner,
     dig 2
     box_get
     assert // Box must have value
     extract 24 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:298
+    // smart_contracts/agrobloc/contract.algo.ts:302
     // apy: investment_to_claim.value.apy,
     dig 3
     box_get
     assert // Box must have value
     extract 0 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:299
+    // smart_contracts/agrobloc/contract.algo.ts:303
     // maturityDuration: investment_to_claim.value.maturityDuration,
     dig 4
     box_get
     assert // Box must have value
     extract 8 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:300
+    // smart_contracts/agrobloc/contract.algo.ts:304
     // timeClaimed: investment_to_claim.value.timeClaimed,
     dig 5
     box_get
     assert // Box must have value
     extract 16 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:301
+    // smart_contracts/agrobloc/contract.algo.ts:305
     // claimer: investment_to_claim.value.claimer,
     dig 6
     box_get
     assert // Box must have value
     extract 58 32 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:302
+    // smart_contracts/agrobloc/contract.algo.ts:306
     // value: investment_to_claim.value.value,
     dig 7
     box_get
     assert // Box must have value
     extract 90 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:303
+    // smart_contracts/agrobloc/contract.algo.ts:307
     // amountRepaid: investment_to_claim.value.amountToRepay,
     dig 8
     box_get
     assert // Box must have value
     extract 106 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:305
+    // smart_contracts/agrobloc/contract.algo.ts:309
     // collateral: investment_to_claim.value.collateral,
     dig 9
     box_get
     assert // Box must have value
     extract 122 8 // on error: Index access is out of bounds
-    // smart_contracts/agrobloc/contract.algo.ts:294-306
+    // smart_contracts/agrobloc/contract.algo.ts:298-310
     // investment_to_claim.value = new Investment({
     //   ownerTitle: investment_to_claim.value.ownerTitle,
     //   asset: investment_to_claim.value.asset,
@@ -1727,10 +1724,10 @@ claim_overdue_investment:
     concat
     uncover 2
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:304
+    // smart_contracts/agrobloc/contract.algo.ts:308
     // amountToRepay: new arc4.UintN64(0),
     bytec_0 // 0x0000000000000000
-    // smart_contracts/agrobloc/contract.algo.ts:294-306
+    // smart_contracts/agrobloc/contract.algo.ts:298-310
     // investment_to_claim.value = new Investment({
     //   ownerTitle: investment_to_claim.value.ownerTitle,
     //   asset: investment_to_claim.value.asset,
@@ -1760,30 +1757,30 @@ claim_overdue_investment:
 
 // smart_contracts/agrobloc/contract.algo.ts::Agrobloc.delete_property(property: uint64) -> void:
 delete_property:
-    // smart_contracts/agrobloc/contract.algo.ts:309-310
+    // smart_contracts/agrobloc/contract.algo.ts:313-314
     // @abimethod()
     // public delete_property(property: uint64) {
     proto 1 0
-    // smart_contracts/agrobloc/contract.algo.ts:311
+    // smart_contracts/agrobloc/contract.algo.ts:315
     // const property_to_delete = this.property(property);
     frame_dig -1
     itob
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     bytec_1 // "property"
-    // smart_contracts/agrobloc/contract.algo.ts:311
+    // smart_contracts/agrobloc/contract.algo.ts:315
     // const property_to_delete = this.property(property);
     swap
-    // smart_contracts/agrobloc/contract.algo.ts:80
+    // smart_contracts/agrobloc/contract.algo.ts:81
     // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
     concat
-    // smart_contracts/agrobloc/contract.algo.ts:313
+    // smart_contracts/agrobloc/contract.algo.ts:317
     // assert(property_to_delete.exists);
     dup
     box_len
     bury 1
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:314
+    // smart_contracts/agrobloc/contract.algo.ts:318
     // assert(property_to_delete.value.owner.native === Txn.sender);
     dup
     box_get
@@ -1792,7 +1789,7 @@ delete_property:
     txn Sender
     ==
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:315
+    // smart_contracts/agrobloc/contract.algo.ts:319
     // assert(property_to_delete.value.investment.native === 0);
     dup
     box_get
@@ -1801,7 +1798,7 @@ delete_property:
     extract_uint64
     !
     assert
-    // smart_contracts/agrobloc/contract.algo.ts:317
+    // smart_contracts/agrobloc/contract.algo.ts:321
     // property_to_delete.delete();
     box_del
     pop
