@@ -37,7 +37,7 @@ class Investment extends arc4.Struct<{
   // Annual percentage yield
   apy: arc4.UintN64,
 
-  // Duration in milliseconds after which investment must be paid back
+  // Duration in years after which investment must be paid back
   maturityDuration: arc4.UintN64,
 
   // Unix Timestamp of time when a farmer claimed the investment.
@@ -51,16 +51,22 @@ class Investment extends arc4.Struct<{
   ownerTitle: arc4.Str,
 
   // Farmer
+  // Defaults to ""
   claimer: arc4.Str,
 
   // Value of investment
   value: arc4.UintN64,
 
   // Amount repaid
+  // defaults to 0
   amountRepaid: arc4.UintN64,
 
   // Amount to repay
+  // defaults to 0
   amountToRepay: arc4.UintN64,
+
+  // Investment ASA
+  asset: arc4.UintN64,
 }> {}
 
 export class Agrobloc extends Contract {
@@ -99,6 +105,36 @@ export class Agrobloc extends Contract {
     return response.createdAsset.id;
   }
 
+  @abimethod()
+  public create_investment(
+    apy: uint64,
+    maturityDuration: uint64,
+    ownerTitle: string,
+    value: uint64,
+  ): uint64 {
+    assert(value > 0);
+
+    const response = itxn.assetConfig({
+      assetName: ownerTitle,
+      total: 1,
+      decimals: 0,
+    }).submit();
+
+    this.investment(response.createdAsset.id).value = new Investment({
+      ownerTitle: new arc4.Str(ownerTitle),
+      asset: new arc4.UintN64(response.createdAsset.id),
+      owner: new arc4.Address(Txn.sender),
+      apy: new arc4.UintN64(apy),
+      maturityDuration: new arc4.UintN64(maturityDuration),
+      timeClaimed: new arc4.UintN64(0),
+      claimer: new arc4.Str(''),
+      value: new arc4.UintN64(value),
+      amountRepaid: new arc4.UintN64(0),
+      amountToRepay: new arc4.UintN64(0),
+    });
+
+    return response.createdAsset.id;
+  }
 
   public hello(name: string): string {
     return `Hello, ${name}`
