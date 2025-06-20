@@ -4,9 +4,12 @@ import {
   assert,
   BoxMap,
   Contract,
+  Global,
+  gtxn,
   itxn,
   Txn,
-  uint64,
+  Uint64,
+  uint64
 } from '@algorandfoundation/algorand-typescript';
 
 class Property extends arc4.Struct<{
@@ -52,7 +55,7 @@ class Investment extends arc4.Struct<{
 
   // Farmer
   // Defaults to ""
-  claimer: arc4.Str,
+  claimer: arc4.Address,
 
   // Value of investment
   value: arc4.UintN64,
@@ -67,6 +70,10 @@ class Investment extends arc4.Struct<{
 
   // Investment ASA
   asset: arc4.UintN64,
+
+  // Collateral 
+  // Defaults to 0
+  collateral: arc4.UintN64,
 }> {}
 
 export class Agrobloc extends Contract {
@@ -107,12 +114,12 @@ export class Agrobloc extends Contract {
 
   @abimethod()
   public create_investment(
+    paymentTxn: gtxn.PaymentTxn,
     apy: uint64,
     maturityDuration: uint64,
     ownerTitle: string,
-    value: uint64,
   ): uint64 {
-    assert(value > 0);
+    assert(paymentTxn.amount > 0);
 
     const response = itxn.assetConfig({
       assetName: ownerTitle,
@@ -127,16 +134,186 @@ export class Agrobloc extends Contract {
       apy: new arc4.UintN64(apy),
       maturityDuration: new arc4.UintN64(maturityDuration),
       timeClaimed: new arc4.UintN64(0),
-      claimer: new arc4.Str(''),
-      value: new arc4.UintN64(value),
+      claimer: new arc4.Address(Global.zeroAddress),
+      value: new arc4.UintN64(paymentTxn.amount),
       amountRepaid: new arc4.UintN64(0),
       amountToRepay: new arc4.UintN64(0),
+      collateral: new arc4.UintN64(0),
     });
 
     return response.createdAsset.id;
   }
 
-  public hello(name: string): string {
-    return `Hello, ${name}`
+  @abimethod()
+  public claim_investment(investment: uint64, collateral: uint64) {
+    const investment_to_claim = this.investment(investment);
+    assert(investment_to_claim.exists);
+    assert(investment_to_claim.value.timeClaimed.native === 0);
+    assert(investment_to_claim.value.claimer.native === Global.zeroAddress);
+
+    const property = this.property(collateral);
+    assert(property.exists);
+    assert(property.value.owner.native === Txn.sender);
+    assert(property.value.investment.native === 0);
+    assert(property.value.value.native * 3 / 4 >= investment_to_claim.value.value.native);
+
+    itxn.payment({
+      receiver: Txn.sender,
+      amount: investment_to_claim.value.value.native,
+    }).submit();
+
+    property.value = new Property({
+      title: property.value.title,
+      asset: property.value.asset,
+      owner: property.value.owner,
+      latLong: property.value.latLong,
+      address: property.value.address,
+      investment: investment_to_claim.value.asset,
+      value: property.value.value,
+    });
+
+    const amountToRepay = Uint64(investment_to_claim.value.value.native +  investment_to_claim.value.apy.native / 100 * investment_to_claim.value.value.native)
+
+    investment_to_claim.value = new Investment({
+      ownerTitle: investment_to_claim.value.ownerTitle,
+      asset: investment_to_claim.value.asset,
+      owner: investment_to_claim.value.owner,
+      apy: investment_to_claim.value.apy,
+      maturityDuration: investment_to_claim.value.maturityDuration,
+      timeClaimed: new arc4.UintN64(Global.latestTimestamp),
+      claimer: new arc4.Address(Txn.sender),
+      value: investment_to_claim.value.value,
+      amountRepaid: new arc4.UintN64(0),
+      amountToRepay: new arc4.UintN64(amountToRepay),
+      collateral: new arc4.UintN64(collateral),
+    });
+  }
+
+  @abimethod()
+  public repay_investment(
+    payment: gtxn.PaymentTxn,
+    investment: uint64
+  ) {
+    const investment_to_repay = this.investment(investment);
+    assert(investment_to_repay.exists);
+    assert(investment_to_repay.value.claimer.native === Txn.sender);
+    assert(
+      payment.amount <= investment_to_repay.value.amountToRepay.native - investment_to_repay.value.amountRepaid.native
+    );
+    assert(payment.receiver === Global.currentApplicationAddress);
+    assert(payment.amount > 0);
+
+    const isOverdue = 
+      investment_to_repay.value.timeClaimed.native + investment_to_repay.value.maturityDuration.native < Global.latestTimestamp;
+
+    assert(!isOverdue);
+
+    itxn.payment({
+      receiver: investment_to_repay.value.owner.native,
+      amount: payment.amount,
+    }).submit();
+
+    const amountRepaid = Uint64(investment_to_repay.value.amountRepaid.native + payment.amount);
+
+    investment_to_repay.value = new Investment({
+      ownerTitle: investment_to_repay.value.ownerTitle,
+      asset: investment_to_repay.value.asset,
+      owner: investment_to_repay.value.owner,
+      apy: investment_to_repay.value.apy,
+      maturityDuration: investment_to_repay.value.maturityDuration,
+      timeClaimed: investment_to_repay.value.timeClaimed,
+      claimer: investment_to_repay.value.claimer,
+      value: investment_to_repay.value.value,
+      amountRepaid: new arc4.UintN64(amountRepaid),
+      amountToRepay: investment_to_repay.value.amountToRepay,
+      collateral: investment_to_repay.value.collateral,
+    });
+
+    if (amountRepaid === investment_to_repay.value.amountRepaid.native) {
+      const collateral = this.property(investment_to_repay.value.collateral.native);
+
+      assert(collateral.exists);
+      assert(collateral.value.investment.native === investment_to_repay.value.asset.native);
+
+      collateral.value = new Property({
+        title: collateral.value.title,
+        asset: collateral.value.asset,
+        owner: collateral.value.owner,
+        latLong: collateral.value.latLong,
+        address: collateral.value.address,
+        investment: new arc4.UintN64(0),
+        value: collateral.value.value,
+      })
+    }
+  }
+
+  @abimethod()
+  public delete_investment(investment: uint64) {
+    const investment_to_delete = this.investment(investment);
+    assert(investment_to_delete.exists);
+    assert(investment_to_delete.value.timeClaimed.native === 0);
+    assert(investment_to_delete.value.claimer.native === Global.zeroAddress);
+    assert(investment_to_delete.value.owner.native === Txn.sender);
+    assert(investment_to_delete.value.collateral.native === 0)
+
+    itxn.payment({
+      receiver: Txn.sender,
+      amount: investment_to_delete.value.value.native,
+    }).submit();
+
+    investment_to_delete.delete();
+  }
+
+  @abimethod()
+  public claim_overdue_investment(investment: uint64) {
+    const investment_to_claim = this.investment(investment);
+    assert(investment_to_claim.exists);
+    assert(investment_to_claim.value.owner.native === Txn.sender);
+    assert(investment_to_claim.value.claimer.native !== Global.zeroAddress);
+    assert(investment_to_claim.value.amountToRepay.native > 0);
+    assert(investment_to_claim.value.amountRepaid.native < investment_to_claim.value.amountToRepay.native);
+
+    const isOverdue = 
+      investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native < Global.latestTimestamp;
+
+    assert(isOverdue);
+    const collateral = this.property(investment_to_claim.value.collateral.native);
+
+    assert(collateral.value.investment.native === investment_to_claim.value.asset.native);
+
+    collateral.value = new Property({
+      title: collateral.value.title,
+      asset: collateral.value.asset,
+      owner: new arc4.Address(Txn.sender),
+      latLong: collateral.value.latLong,
+      address: collateral.value.address,
+      investment: new arc4.UintN64(0),
+      value: collateral.value.value,
+    });
+
+    investment_to_claim.value = new Investment({
+      ownerTitle: investment_to_claim.value.ownerTitle,
+      asset: investment_to_claim.value.asset,
+      owner: investment_to_claim.value.owner,
+      apy: investment_to_claim.value.apy,
+      maturityDuration: investment_to_claim.value.maturityDuration,
+      timeClaimed: investment_to_claim.value.timeClaimed,
+      claimer: investment_to_claim.value.claimer,
+      value: investment_to_claim.value.value,
+      amountRepaid: investment_to_claim.value.amountToRepay,
+      amountToRepay: new arc4.UintN64(0),
+      collateral: investment_to_claim.value.collateral,
+    });
+  }
+
+  @abimethod()
+  public delete_property(property: uint64) {
+    const property_to_delete = this.property(property);
+
+    assert(property_to_delete.exists);
+    assert(property_to_delete.value.owner.native === Txn.sender);
+    assert(property_to_delete.value.investment.native === 0);
+
+    property_to_delete.delete();
   }
 }
