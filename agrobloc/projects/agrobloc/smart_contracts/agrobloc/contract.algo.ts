@@ -78,9 +78,9 @@ class Investment extends arc4.Struct<{
 }> {}
 
 export class Agrobloc extends Contract {
-  public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
+  public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
 
-  public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+  public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
 
   @abimethod({ onCreate: 'require' })
   public create_application() {}
@@ -208,7 +208,7 @@ export class Agrobloc extends Contract {
     assert(payment.amount > 0);
 
     const isOverdue = 
-      investment_to_repay.value.timeClaimed.native + investment_to_repay.value.maturityDuration.native < Global.latestTimestamp;
+      Global.latestTimestamp > (investment_to_repay.value.timeClaimed.native + investment_to_repay.value.maturityDuration.native);
 
     assert(!isOverdue);
 
@@ -233,7 +233,7 @@ export class Agrobloc extends Contract {
       collateral: investment_to_repay.value.collateral,
     });
 
-    if (amountRepaid === investment_to_repay.value.amountRepaid.native) {
+    if (amountRepaid === investment_to_repay.value.amountToRepay.native) {
       const collateral = this.property(investment_to_repay.value.collateral.native);
 
       assert(collateral.exists);
@@ -277,8 +277,8 @@ export class Agrobloc extends Contract {
     assert(investment_to_claim.value.amountToRepay.native > 0);
     assert(investment_to_claim.value.amountRepaid.native < investment_to_claim.value.amountToRepay.native);
 
-    const isOverdue = 
-      investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native < Global.latestTimestamp;
+    const isOverdue = Global.latestTimestamp >
+      investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native;
 
     assert(isOverdue);
     const collateral = this.property(investment_to_claim.value.collateral.native);

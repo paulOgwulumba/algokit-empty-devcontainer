@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0 50 52
-    bytecblock 0x0000000000000000 "property" "investment" 0x003e 0x0082 0x151f7c75
+    bytecblock 0x0000000000000000 "property-" "investment-" 0x003e 0x0082 0x151f7c75
     // smart_contracts/agrobloc/contract.algo.ts:80
     // export class Agrobloc extends Contract {
     txn NumAppArgs
@@ -283,8 +283,8 @@ list_property:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
-    bytec_1 // "property"
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
+    bytec_1 // "property-"
     dig 1
     concat
     // smart_contracts/agrobloc/contract.algo.ts:110
@@ -407,8 +407,8 @@ create_investment:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
-    bytec_2 // "investment"
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
+    bytec_2 // "investment-"
     dig 1
     concat
     // smart_contracts/agrobloc/contract.algo.ts:132
@@ -566,13 +566,13 @@ claim_investment:
     frame_dig -2
     itob
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
-    bytec_2 // "investment"
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
+    bytec_2 // "investment-"
     // smart_contracts/agrobloc/contract.algo.ts:153
     // const investment_to_claim = this.investment(investment);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:154
     // assert(investment_to_claim.exists);
@@ -603,13 +603,13 @@ claim_investment:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
-    bytec_1 // "property"
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
+    bytec_1 // "property-"
     // smart_contracts/agrobloc/contract.algo.ts:158
     // const property = this.property(collateral);
     dig 1
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:159
     // assert(property.exists);
@@ -931,13 +931,13 @@ repay_investment:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
-    bytec_2 // "investment"
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
+    bytec_2 // "investment-"
     // smart_contracts/agrobloc/contract.algo.ts:201
     // const investment_to_repay = this.investment(investment);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:201
     // const investment_to_repay = this.investment(investment);
@@ -990,20 +990,20 @@ repay_investment:
     dup
     assert
     // smart_contracts/agrobloc/contract.algo.ts:211
-    // investment_to_repay.value.timeClaimed.native + investment_to_repay.value.maturityDuration.native < Global.latestTimestamp;
-    dig 1
+    // Global.latestTimestamp > (investment_to_repay.value.timeClaimed.native + investment_to_repay.value.maturityDuration.native);
+    global LatestTimestamp
+    dig 2
     box_get
     assert // Box must have value
     pushint 16 // 16
     extract_uint64
-    dig 2
+    dig 3
     box_get
     assert // Box must have value
     pushint 8 // 8
     extract_uint64
     +
-    global LatestTimestamp
-    <
+    >
     // smart_contracts/agrobloc/contract.algo.ts:213
     // assert(!isOverdue);
     !
@@ -1154,11 +1154,11 @@ repay_investment:
     swap
     box_put
     // smart_contracts/agrobloc/contract.algo.ts:236
-    // if (amountRepaid === investment_to_repay.value.amountRepaid.native) {
+    // if (amountRepaid === investment_to_repay.value.amountToRepay.native) {
     swap
     box_get
     assert // Box must have value
-    pushint 98 // 98
+    pushint 106 // 106
     extract_uint64
     ==
     bz repay_investment_after_if_else@3
@@ -1172,13 +1172,13 @@ repay_investment:
     extract_uint64
     itob
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
-    bytec_1 // "property"
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
+    bytec_1 // "property-"
     // smart_contracts/agrobloc/contract.algo.ts:237
     // const collateral = this.property(investment_to_repay.value.collateral.native);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:239
     // assert(collateral.exists);
@@ -1325,13 +1325,13 @@ delete_investment:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
-    bytec_2 // "investment"
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
+    bytec_2 // "investment-"
     // smart_contracts/agrobloc/contract.algo.ts:256
     // const investment_to_delete = this.investment(investment);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:257
     // assert(investment_to_delete.exists);
@@ -1421,13 +1421,13 @@ claim_overdue_investment:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
-    bytec_2 // "investment"
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
+    bytec_2 // "investment-"
     // smart_contracts/agrobloc/contract.algo.ts:273
     // const investment_to_claim = this.investment(investment);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:83
-    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment' });
+    // public investment = BoxMap<uint64, Investment>({ keyPrefix: 'investment-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:274
     // assert(investment_to_claim.exists);
@@ -1475,21 +1475,26 @@ claim_overdue_investment:
     extract_uint64
     <
     assert
+    // smart_contracts/agrobloc/contract.algo.ts:280
+    // const isOverdue = Global.latestTimestamp >
+    global LatestTimestamp
     // smart_contracts/agrobloc/contract.algo.ts:281
-    // investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native < Global.latestTimestamp;
-    dup
+    // investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native;
+    dig 1
     box_get
     assert // Box must have value
     pushint 16 // 16
     extract_uint64
-    dig 1
+    dig 2
     box_get
     assert // Box must have value
     pushint 8 // 8
     extract_uint64
     +
-    global LatestTimestamp
-    <
+    // smart_contracts/agrobloc/contract.algo.ts:280-281
+    // const isOverdue = Global.latestTimestamp >
+    //   investment_to_claim.value.timeClaimed.native + investment_to_claim.value.maturityDuration.native;
+    >
     // smart_contracts/agrobloc/contract.algo.ts:283
     // assert(isOverdue);
     assert
@@ -1502,13 +1507,13 @@ claim_overdue_investment:
     extract_uint64
     itob
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
-    bytec_1 // "property"
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
+    bytec_1 // "property-"
     // smart_contracts/agrobloc/contract.algo.ts:284
     // const collateral = this.property(investment_to_claim.value.collateral.native);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:286
     // assert(collateral.value.investment.native === investment_to_claim.value.asset.native);
@@ -1766,13 +1771,13 @@ delete_property:
     frame_dig -1
     itob
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
-    bytec_1 // "property"
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
+    bytec_1 // "property-"
     // smart_contracts/agrobloc/contract.algo.ts:315
     // const property_to_delete = this.property(property);
     swap
     // smart_contracts/agrobloc/contract.algo.ts:81
-    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property' });
+    // public property = BoxMap<uint64, Property>({ keyPrefix: 'property-' });
     concat
     // smart_contracts/agrobloc/contract.algo.ts:317
     // assert(property_to_delete.exists);
