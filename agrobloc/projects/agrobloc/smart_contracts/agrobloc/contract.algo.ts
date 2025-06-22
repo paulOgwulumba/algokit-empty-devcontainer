@@ -35,6 +35,15 @@ class Property extends arc4.Struct<{
   // Identifier for investment claimed with this property.
   // Defaults to 0.
   investment: arc4.UintN64,
+
+  // Timestamp of creation
+  createdAt: arc4.UintN64,
+
+  // First owner
+  initialOwner: arc4.Address,
+
+  // Identifier for last investment, defaults to 0
+  lastInvestment: arc4.UintN64,
 }> {}
 
 class Investment extends arc4.Struct<{
@@ -75,6 +84,13 @@ class Investment extends arc4.Struct<{
   // Collateral 
   // Defaults to 0
   collateral: arc4.UintN64,
+
+  // Time repayed
+  // Defaults to 0
+  timeRepaid: arc4.UintN64,
+
+  // Timestamp of creation
+  createdAt: arc4.UintN64,
 }> {}
 
 export class Agrobloc extends Contract {
@@ -117,6 +133,9 @@ export class Agrobloc extends Contract {
       address: new arc4.Str(address),
       investment: new arc4.UintN64(0),
       value: new arc4.UintN64(value),
+      createdAt: new arc4.UintN64(Global.latestTimestamp),
+      initialOwner: new arc4.Address(Txn.sender),
+      lastInvestment: new arc4.UintN64(0),
     });
   }
 
@@ -143,6 +162,8 @@ export class Agrobloc extends Contract {
       amountRepaid: new arc4.UintN64(0),
       amountToRepay: new arc4.UintN64(0),
       collateral: new arc4.UintN64(0),
+      timeRepaid: new arc4.UintN64(0),
+      createdAt: new arc4.UintN64(Global.latestTimestamp),
     });
 
     return asset.id;
@@ -174,6 +195,9 @@ export class Agrobloc extends Contract {
       address: property.value.address,
       investment: investment_to_claim.value.asset,
       value: property.value.value,
+      createdAt: property.value.createdAt,
+      initialOwner: property.value.initialOwner,
+      lastInvestment: investment_to_claim.value.asset,
     });
 
     const amountToRepay = Uint64(investment_to_claim.value.value.native +  investment_to_claim.value.apy.native / 100 * investment_to_claim.value.value.native)
@@ -190,6 +214,8 @@ export class Agrobloc extends Contract {
       amountRepaid: new arc4.UintN64(0),
       amountToRepay: new arc4.UintN64(amountToRepay),
       collateral: new arc4.UintN64(collateral),
+      timeRepaid: investment_to_claim.value.timeRepaid,
+      createdAt: investment_to_claim.value.createdAt,
     });
   }
 
@@ -231,6 +257,8 @@ export class Agrobloc extends Contract {
       amountRepaid: new arc4.UintN64(amountRepaid),
       amountToRepay: investment_to_repay.value.amountToRepay,
       collateral: investment_to_repay.value.collateral,
+      timeRepaid: new arc4.UintN64(Global.latestTimestamp),
+      createdAt: investment_to_repay.value.createdAt,
     });
 
     if (amountRepaid === investment_to_repay.value.amountToRepay.native) {
@@ -247,6 +275,9 @@ export class Agrobloc extends Contract {
         address: collateral.value.address,
         investment: new arc4.UintN64(0),
         value: collateral.value.value,
+        createdAt: collateral.value.createdAt,
+        initialOwner: collateral.value.initialOwner,
+        lastInvestment: collateral.value.lastInvestment,
       })
     }
   }
@@ -293,6 +324,9 @@ export class Agrobloc extends Contract {
       address: collateral.value.address,
       investment: new arc4.UintN64(0),
       value: collateral.value.value,
+      createdAt: collateral.value.createdAt,
+      initialOwner: collateral.value.initialOwner,
+      lastInvestment: collateral.value.lastInvestment,
     });
 
     investment_to_claim.value = new Investment({
@@ -307,6 +341,8 @@ export class Agrobloc extends Contract {
       amountRepaid: investment_to_claim.value.amountToRepay,
       amountToRepay: new arc4.UintN64(0),
       collateral: investment_to_claim.value.collateral,
+      timeRepaid: investment_to_claim.value.timeRepaid,
+      createdAt: investment_to_claim.value.createdAt,
     });
   }
 
